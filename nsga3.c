@@ -151,7 +151,6 @@ void niching(int *niche_count, Node *elite, int H, int size_nondom,
 			temp = temp->next;
 		}
 		for(i=current_size-non_dom+1;i<current_size+1; i++){
-			//if(closest_refpoint[i]==jbar) agregar(ijbar, i);
 			if(temp->c_point == jbar) agregar(ijbar, i);
 			temp= temp->next;
 		}
@@ -165,7 +164,7 @@ void niching(int *niche_count, Node *elite, int H, int size_nondom,
 				// distancia, agregar a next_pop
 				for(i=0; i<size_ijbar; i++){
 					int ijbar_ind = indice(ijbar, i+1); 
-					int ldist = lista_dist(lista, ijbar_ind);
+					int ldist = get_dist_list(lista, ijbar_ind);
 					if(min > ldist){
 						min = ldist;
 						idx = ijbar_ind;

@@ -239,3 +239,13 @@ void set_info_list(Node *inicio, int pos, int c_point, double dist){
 	current->dist = dist;
 	current->c_point = c_point;
 }
+
+
+double get_dist_list(Node *inicio, int index){
+	Node *current = inicio;
+	for(int i=0; i<index; i++){
+		current = current->next;
+	}
+
+	return 	current->dist;
+}

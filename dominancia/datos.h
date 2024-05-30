@@ -24,3 +24,4 @@ int *lista_a_arreglo(Node *inicio);
 void imprimir_lista(Node *inicio);
 void liberar_lista(Node **inicio);
 void set_info_list(Node *inicio, int pos, int c_point, double dist);
+double get_dist_list(Node *list, int index);
