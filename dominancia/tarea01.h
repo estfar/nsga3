@@ -1,5 +1,5 @@
-#ifndef _SIA_H
-#define _SIA_H
+#ifndef _TAREA01_H
+#define _TAREA01_H
 #include "aleatorio.h"
 #include "datos.h"
 
@@ -11,6 +11,7 @@ void escribir_soluciones(double **datos, char* fname, int n, int m);
 int algoritmo1(char *fname, int n, int m);
 int algoritmo2(char *fname, int n, int m);
 Node *algoritmoM3(double **datos, int *indices, int n, int m);
-int algoritmo3(char *fname, int n, int m, int **nodominadas, int **dominadas);
+//int algoritmo3(char *fname, int n, int m, int **nodominadas, int **dominadas);
+int algoritmo3(double **datos, int n, int m, int **nodominadas, int **dominadas);
 
 #endif

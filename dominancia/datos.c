@@ -164,6 +164,12 @@ int indice(Node *inicio, int index){
 	}
 	return actual->data;
 }
+/* Vaciar la lista, conservando la cabeza */
+int vaciar_lista(Node *inicio){
+	while(inicio->next != NULL){
+		pop(&inicio);
+	}
+}
 /* Buscar elemento 'item' en la lista */
 int buscar(Node *inicio, int item){
 	Node *actual = inicio;
@@ -210,11 +216,13 @@ void imprimir_lista(Node *inicio){
 	}
 }
 
-void liberar_lista(Node *inicio){
-	Node * temp;
-	while(inicio != NULL){
-		temp = inicio;
-		inicio = inicio->next;
-		free(temp);
+void liberar_lista(Node **inicio){
+	Node * temp = *inicio;
+	Node *temp2;
+	while(temp != NULL){
+		temp2 = temp;
+		temp = temp->next;
+		free(temp2);
 	}
+	*inicio = NULL;
 }

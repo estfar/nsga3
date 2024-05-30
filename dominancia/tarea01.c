@@ -150,7 +150,7 @@ int algoritmo1(char *fname, int n, int m){
 	int tam = size(lista);
 	int *indices = lista_a_arreglo(lista);
 	
-	liberar_lista(lista);
+	liberar_lista(&lista);
 
 	int dominadas = n-tam;
 	for(i=0; i<n; i++){
@@ -244,7 +244,7 @@ int algoritmo2(char *fname, int n, int m){
 	tam = size(lista);
 	int *indices = lista_a_arreglo(lista);
 	
-	liberar_lista(lista);
+	liberar_lista(&lista);
 
 	printf("La cantidad de soluciones dominadas es: %d de %d\n", tam, n);
 	
@@ -403,7 +403,7 @@ int algoritmo3(double **datos, int n, int m, int **nodominadas, int **dominadas)
 		
 		maxima = algoritmoM3(datos, indexes, sizeTotal, m);
 		
-		liberar_lista(B);
+		liberar_lista(&B);
 	}
 	end = clock();
 
@@ -430,7 +430,7 @@ int algoritmo3(double **datos, int n, int m, int **nodominadas, int **dominadas)
 	}
 
 
-	liberar_lista(maxima);
+	liberar_lista(&maxima);
 
 	printf("La cantidad de soluciones dominadas es: %d de %d\n", tam, n);
 	
@@ -451,11 +451,6 @@ int algoritmo3(double **datos, int n, int m, int **nodominadas, int **dominadas)
 	free(indices);
 	*/
 	
-	for(i=0; i<n; i++){
-		free(datos[i]);
-	}
-
-	free(datos);
 	/*
 	char fnamend[50];
 	sprintf(fnamend, "salida/%s-3.nd", fname);

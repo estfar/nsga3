@@ -109,9 +109,9 @@ double norm2(double *w, int m){
 }
 
 /* seleccionar los elementos faltantes para llevar nextpop */
-void niching(int size_nondom, int curr_size; int *niche_count, int H, int *closest_refpoint, 
-	     double *distances, int *elite_arr, double **pop, double **next_pop, int n, 
-	     int m){
+void niching(int *niche_count, int *closest_refpoint, double *distances, int H,
+	     Node *elite, int size_nondom,  double **pop, double **next_pop, 
+	     int n, int m){
 	// curr_size es mayor que n, también es el tamaño de elite_arr
 	// niche_count tiene tamaño de H
 	// El tamaño de S_t (sin F_l) es curr_size - size_nondom
@@ -119,34 +119,67 @@ void niching(int size_nondom, int curr_size; int *niche_count, int H, int *close
 	/*iterar sobre los k-ultimos miembros de elite_arr, osea size_nondom*/
 	int k = 0, K = n - (curr_size-size_nondom), pi=0;
 	int i, j, jbar;
-	Node *jmin, *ijbar; 
-	crear_lista(jmin);
-	crear_lista(ijbar);
-	agregar(jmin, -1);
-	agregar(ijbar, -1);
+	Node *jmin, *ijbar, *jexcluded; 
+	jmin = crear_lista(-1);
+	ijbar = crear_lista(-1);
+	jexcluded = crear_lista(-1);
+	
 	while(k<K){
-		// Buscar los miembros de S_t con niche_count == pi
+		// Buscar los miembros de ref_point con niche_count == pi
+		// y ponerlos en una lista (jmin)
+		liberar_lista(&jmin->next);
 		for(i=0; i<H; i++){
-			if(niche_count[i] == pi) agregar(jmin, i);
+			if(buscar(jexclude, i) == 0){
+				if(niche_count[i] == pi) agregar(jmin, i);
+			}
 		}
 		int size_jmin = size(jmin)-1;
+
 		if(size_jmin > 0){
-			jbar = indice(jmin, rnd(0, size_jmin));
+		// si jmin no está vacío, elegir un miembro al azar 
+			jbar = indice(jmin, rnd(1, size_jmin+1));
+			//jbar es el indice de un punto de referencia
 		}else{
+		// si jmin está vacío, aumentar pi (niche count)
+		// y volver a armar jmin
 			pi++;
 			continue;
 		}
-		// buscar el/los indice(s) s que corresponda(n) a jbar
+		// buscar las posiciones de elite que corresponda(n) a jbar
+		liberar_lista(&ijbar->next);
 		for(i=current_size-1; i>=current_size-non_dom; i--){
 			if(closest_refpoint[i]==jbar) agregar(ijbar, i);
 		}
+
 		int size_ijbar = size(ijbar)-1;
 		if(size_ijbar != 0){
 			if (pj == 0) {
-				//	
+				int min = 1e20;
+				int idx;
+				// buscar en ijbar el elemento con menor
+				// distancia, agregar a next_pop
+				for(i=0; i<size_ijbar; i++){
+					if(min>distances[indice(ijbar, i+1)]){
+						min = distances[indice(ijbar, i+1)];
+						idx = indice(ijbar, i+1);	
+					}
+					int index_real = indices(elite, idx+1);
+					copiar_ind(next_pop, m, n-K-1, pop[index_real]);
+				}
+			}else{
+				// agregar aleatorio a next_pop
+				int add_ind = indice(ijbar, rnd(1, size_ijbar+1));
+				//         next_pop, n_obj, pos, individuo
+				copiar_ind(next_pop, m, n-K+k, pop[indice(elite, add_ind+1)] );
+				// eliminar el individuo de elite, ¿como hacerlo eliminando 
+				// eliminando también las posiciones en los otros dos arreglos
+				// SOLUCIÓN: UNIFICARLO EN UNA SOLA LISTA - PENDIENTE
 			}
-			pi++;
 			k++;
+			pi++;
+		}else{
+			// excluir jbar de las proximas busquedas
+			agregar(jexcluded, jbar);
 		}
 	}
 	
@@ -160,7 +193,7 @@ void non_dominanted_sort(double **pop, double **nextpop, int n, int m, int H){
 	int *nodominadas = (int *)calloc(2*n, int);
 	int size_dom, size_nondom, current_size=0;
 	Node *elite;
-	int *elite_arr;
+	//int *elite_arr;
 	int i, j;
 	
 	crear_lista(elite);
@@ -197,14 +230,14 @@ void non_dominanted_sort(double **pop, double **nextpop, int n, int m, int H){
 		size_dom = n-size_nondom;
 	}
 	
-	pop(&elite);
-	elite_arr = lista_a_arreglo(elite); /*contiene los indices de
-	los frentes no dominados, siendo los últimos los que pertenecen
-	al frente F_l*/
-	liberar_lista(elite);
+	//pop(&elite);
+	//elite_arr = lista_a_arreglo(elite); 
+	///*contiene los indices de los frentes no dominados, siendo los últimos 
+	//los que pertenecen al frente F_l*/
+	//liberar_lista(elite);
 
 	if (current_size == n){
-		copiar(pop, next_pop, n, m, elite_arr);
+		copiar(pop, next_pop, n, m, elite);
 	}else{
 		double **ref_points, *distances;
 		int *closest_refpoint;
@@ -212,13 +245,13 @@ void non_dominanted_sort(double **pop, double **nextpop, int n, int m, int H){
 		
 		/* copiar los l-1 primeros frentes no dominados*/
 		copiar(pop, next_pop, current_size-size_nondom, 
-				m, elite_arr);
+				m, elite);
 		/* normalizar los puntos de S_t(elite)*/
-		double **normalized = normalize(pop, elite_arr, 
+		double **normalized = normalize(pop, elite, 
 				current_size, m, ref_points, H);
 		/* asociar los punto de S_t(elite) con los
 		 * puntos de referencia */
-		associate(normalized, elite_arr, current_size, m,
+		associate(normalized, elite, current_size, m,
 				ref_points, closest_refpoint,
 				distances);
 		/* Niche count */
@@ -227,8 +260,8 @@ void non_dominanted_sort(double **pop, double **nextpop, int n, int m, int H){
 		}
 		/* copiar los n-current_size miembros restantes en next_pop
 		 * de entre los K elementos del frente F_l */
-		niching(size_nondom, niche_count, closest_refpoint, distances,
-				ref_points, elite_arr, pop, next_pop, n, m);
+		niching(niche_count, closest_refpoint, distances,  H, 
+			elite, size_nondom,  pop, next_pop, n, m);
 
 		free(ref_points);
 		free(closest_refpoint);

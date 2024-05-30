@@ -1,7 +1,10 @@
 #ifndef _GLOGAL_H
 #define _GLOBAL_H
+#include"dominancia/tarea01.h"
 /*misc.c*/
 int factorial(int x);
+void copiar_ind(double **next_pop, int m, int pos, double *ind);
+void copiar(double **pop, double **next_pop, int n, int m, Node *indices); 
 /*sort.c*/
 double **normalize(double **pop, int * elite, int current_size, int m, double **ref_points, 
 		   int H, double *a);

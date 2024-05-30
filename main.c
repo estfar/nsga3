@@ -1,11 +1,11 @@
-#include "tarea01.h"
+#include "global.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 int main(){
 	
 	double **datos;
-	datos = archivo_a_arreglo("sol5D.txt", 10, 3);
+	datos = archivo_a_arreglo("dominancia/sol5D.txt", 10, 3);
 
 	double **next_datos = (double**)calloc(10, sizeof(double *));
 	for(int i=0; i<10; i++){
@@ -18,18 +18,29 @@ int main(){
 	int tam ;
 	int * dominadas, *nodominadas;
 	int n, m;
+	Node *lista;
+	lista = crear_lista(-1);
 	n=10;
 	m = 3;
 	tam = algoritmo3(datos, n, m, &nodominadas, &dominadas);
 	printf("Soluciones no dominadas: %d\n", tam);
-	for(int i=0; i<n-tam; i++) printf("%d\n", dominadas[i]);
+	for(int i=0; i<n-tam; i++)
+		printf("%d\n", dominadas[i]);
 	printf("no dominadas\n");
-	for(int i=0; i<tam; i++) printf("%d\n", nodominadas[i]);
-
-	copiar();
-
+	for(int i=0; i<tam; i++){ 
+		printf("%d\n", nodominadas[i]);
+		agregar(lista, nodominadas[i]);
+	}
+	printf("copiar\n");
+	copiar(datos, next_datos, 3, 3, lista);
+	copiar_ind(next_datos, 3, 4, datos[indice(lista, 4)]);
+	for(int i=0; i<10; i++){ 
+		for(int j=0; j<3; j++) printf("%f\t", next_datos[i][j]);
+		printf("\n");
+	}
 	free(dominadas);
 	free(nodominadas);
+	printf("done\n");
 	for(int i=0; i<10; i++){
 		free(next_datos[i]);
 		free(datos[i]);

@@ -53,8 +53,12 @@ int main(){
 	int r = unir(lista, l2);
 	imprimir_lista(lista);
 	printf("tamaño de la nueva lista: %d\n", size(lista));
+
 	//liberar_lista(l2);
-	liberar_lista(lista);	
+	liberar_lista(&lista->next);	
+	printf("liberada\n, tam nodo: %ld\n", sizeof(Node*));
+	imprimir_lista(lista);
+	printf("sizeof: %ld\n", sizeof(lista));	
 	/*
 	eliminar(&lista, 22);
 	tam = size(lista);
