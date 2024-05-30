@@ -1,6 +1,7 @@
 #ifndef _GLOGAL_H
 #define _GLOBAL_H
-
+/*misc.c*/
+int factorial(int x);
 /*sort.c*/
 double **normalize(double **pop, int * elite, int current_size, int m, double **ref_points, 
 		   int H, double *a);
