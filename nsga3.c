@@ -112,14 +112,9 @@ double norm2(double *w, int m){
 }
 
 /* seleccionar los elementos faltantes para llevar nextpop */
-void niching(int *niche_count, int *closest_refpoint, double *distances, int H,
-	     Node *elite, int size_nondom,  double **pop, double **next_pop, 
-	     int n, int m){
-	// curr_size es mayor que n, también es el tamaño de elite_arr
-	// niche_count tiene tamaño de H
-	// El tamaño de S_t (sin F_l) es curr_size - size_nondom
-	// size_nondom es el tamaño de F_l
-	/*iterar sobre los k-ultimos miembros de elite_arr, osea size_nondom*/
+void niching(int *niche_count, Node *elite, int H, int size_nondom, 
+	     double **pop, double **next_pop, int n, int m){
+	
 	int k = 0, K = n - (curr_size-size_nondom), pi=0;
 	int i, j, jbar;
 	Node *jmin, *ijbar, *jexcluded; 
@@ -150,8 +145,15 @@ void niching(int *niche_count, int *closest_refpoint, double *distances, int H,
 		}
 		// buscar las posiciones de elite que corresponda(n) a jbar
 		liberar_lista(&ijbar->next);
-		for(i=current_size-1; i>=current_size-non_dom; i--){
-			if(closest_refpoint[i]==jbar) agregar(ijbar, i);
+		Node *temp = elite->next;
+		int il =0;
+		while(il<current_size-non_dom){
+			temp = temp->next;
+		}
+		for(i=current_size-non_dom+1;i<current_size+1; i++){
+			//if(closest_refpoint[i]==jbar) agregar(ijbar, i);
+			if(temp->c_point == jbar) agregar(ijbar, i);
+			temp= temp->next;
 		}
 
 		int size_ijbar = size(ijbar)-1;
@@ -162,21 +164,22 @@ void niching(int *niche_count, int *closest_refpoint, double *distances, int H,
 				// buscar en ijbar el elemento con menor
 				// distancia, agregar a next_pop
 				for(i=0; i<size_ijbar; i++){
-					if(min>distances[indice(ijbar, i+1)]){
-						min = distances[indice(ijbar, i+1)];
-						idx = indice(ijbar, i+1);	
+					int ijbar_ind = indice(ijbar, i+1); 
+					int ldist = lista_dist(lista, ijbar_ind);
+					if(min > ldist){
+						min = ldist;
+						idx = ijbar_ind;
 					}
-					int index_real = indices(elite, idx+1);
-					copiar_ind(next_pop, m, n-K-1, pop[index_real]);
 				}
+				int index_real = indices(elite, idx+1);
+				copiar_ind(next_pop, m, n-K-1, pop[index_real]);
 			}else{
 				// agregar aleatorio a next_pop
 				int add_ind = indice(ijbar, rnd(1, size_ijbar+1));
+				int index_elite = indice(elite, add_ind+1);
 				//         next_pop, n_obj, pos, individuo
-				copiar_ind(next_pop, m, n-K+k, pop[indice(elite, add_ind+1)] );
-				// eliminar el individuo de elite, ¿como hacerlo eliminando 
-				// eliminando también las posiciones en los otros dos arreglos
-				// SOLUCIÓN: UNIFICARLO EN UNA SOLA LISTA - PENDIENTE
+				copiar_ind(next_pop, m, n-K+k, pop[index_elite] );
+				eliminar(elite, add_ind+1)
 			}
 			k++;
 			pi++;
