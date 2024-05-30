@@ -29,7 +29,7 @@ int main(){
 	printf("no dominadas\n");
 	for(int i=0; i<tam; i++){ 
 		printf("%d\n", nodominadas[i]);
-		agregar(lista, nodominadas[i]);
+		agregar(lista, nodominadas[i],0,0);
 	}
 	printf("copiar\n");
 	copiar(datos, next_datos, 3, 3, lista);

@@ -140,7 +140,7 @@ int algoritmo1(char *fname, int n, int m){
 			}
 		}
 		if(flag == 0){
-			agregar(lista, i);
+			agregar(lista, i, 0, 0);
 		}
 	}
 	end = clock();
@@ -195,7 +195,7 @@ int algoritmo2(char *fname, int n, int m){
 	double ** datos = archivo_a_arreglo(fname, n, m);
 	Node * lista = crear_lista(0);
 	int j=1, i=1, tam=0;
-	agregar(lista, 0); // agregando el primer elemento de datos
+	agregar(lista, 0, 0, 0); // agregando el primer elemento de datos
 	clock_t start, end;
 	// Algoritmo
 	start = clock();
@@ -222,7 +222,7 @@ int algoritmo2(char *fname, int n, int m){
 				continue;
 			}else{
 			// Si no, ir al paso 5
-				agregar(lista, i);
+				agregar(lista, i, 0, 0);
 				i++;
 				j=1;
 			}
@@ -314,7 +314,7 @@ Node * algoritmoM3(double **datos, int *indices, int n, int m){
 	/*Bentley, '93*/
 	int topMax = 1;
 	Node *Max = crear_lista(0);
-	agregar(Max, indices[0]);
+	agregar(Max, indices[0], 0, 0);
 
 	// iterar sobre los elementos de la lista indices
 	for(int i=1; i<n; i++){
@@ -378,10 +378,10 @@ int algoritmo3(double **datos, int n, int m, int **nodominadas, int **dominadas)
 			//agregar(A, i);
 		}else if(dom == 2){
 		// If Q dominates P, place Q in set C
-			agregar(C, i);
+			agregar(C, i, 0, 0);
 		}else{
 		// Otherwise place Q in set BD (incomparable)
-			agregar(B, i);
+			agregar(B, i, 0, 0);
 		}
 	}
 	// If set C is empty, then compue the maxima of S and return

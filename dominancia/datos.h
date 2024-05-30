@@ -3,11 +3,13 @@
 
 typedef struct node{
 	int data;
+	int c_point; //closest ref point
+	double dist; //distance to the closest ref point
 	struct node *next;
 }Node;
 
 Node *crear_lista(int data);
-void agregar(Node *inicio, int data);
+void agregar(Node *inicio, int data, int c_point, double dist);
 void agregar_inicio(Node *inicio, int data);
 int agregar_en_pos(Node *inicio, int data, int pos);
 int unir(Node *l1, Node *l2);

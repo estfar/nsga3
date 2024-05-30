@@ -17,13 +17,15 @@ Node *crear_lista(int data){
 	return inicio;	
 }
 /* Agregar elemento al final de la lista */
-void agregar(Node *inicio, int data){
+void agregar(Node *inicio, int data, int c_point, double dist){
 	Node * actual = inicio;
 	while(actual->next != NULL){
 		actual = actual->next;
 	}
 	actual->next = (Node *)malloc(sizeof(Node));
 	actual->next->data = data;
+	actual->next->c_point = c_point;
+	actual->next->dist = dist;
 	actual->next->next = NULL;
 }
 
