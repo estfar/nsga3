@@ -64,12 +64,14 @@ void gen_ref_points(int m, int p, double **ref_points){
 }
 
 /* asocia un punto en normalized con un punto de referencia y calcula su distancia al mismo  */
-void associate(double **normalized, int curr_size, int m, double **ref_points, 
-	       int *closest_refpoint, double *distances, int H){
+void associate(double **normalized, Node* elite, int curr_size, int m, double **ref_points, int H);
+//void associate(double **normalized, int curr_size, int m, double **ref_points, int H){
+	       //int *closest_refpoint, double *distances, int H){
 	double menor=1e20, dst, index;
-	closest_refpoint = (int *)calloc(curr_size, sizeof(int));
-	distances = (double *)calloc(curr_size, sizeof(double));
+	//closest_refpoint = (int *)calloc(curr_size, sizeof(int));
+	//distances = (double *)calloc(curr_size, sizeof(double));
 	/* para cada punto s en normalized */
+	
 	for(int i=0; i<curr_size; i++){
 		/*para punto de referncia*/
 		for(int j=0; j<H; j++){
@@ -79,8 +81,9 @@ void associate(double **normalized, int curr_size, int m, double **ref_points,
 				index = j;
 			}
 		}
-		closest_refpoint[i] = index;
-		distances[i] = menor;
+		set_info_list(elite, i+1, index, menor);
+		//closest_refpoint[i] = index;
+		//distances[i] = menor;
 	}	 
 }
 
@@ -251,9 +254,8 @@ void non_dominanted_sort(double **pop, double **nextpop, int n, int m, int H){
 				current_size, m, ref_points, H);
 		/* asociar los punto de S_t(elite) con los
 		 * puntos de referencia */
-		associate(normalized, elite, current_size, m,
-				ref_points, closest_refpoint,
-				distances);
+		associate(normalized, elite, current_size, m, ref_points, H);
+				//closest_refpoint,distances);
 		/* Niche count */
 		for(j=0; j<current_size; j++){
 			niche_count[closest_refpoint[j]]++;
