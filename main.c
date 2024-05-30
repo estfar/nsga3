@@ -31,6 +31,9 @@ int main(){
 		printf("%d\n", nodominadas[i]);
 		agregar(lista, nodominadas[i],0,0);
 	}
+
+	set_info_list(lista, 1, 1, 0.3);
+	imprimir_lista(lista);
 	printf("copiar\n");
 	copiar(datos, next_datos, 3, 3, lista);
 	copiar_ind(next_datos, 3, 4, datos[indice(lista, 4)]);

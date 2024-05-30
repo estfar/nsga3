@@ -23,3 +23,4 @@ int buscar(Node *inicio, int item);
 int *lista_a_arreglo(Node *inicio);
 void imprimir_lista(Node *inicio);
 void liberar_lista(Node **inicio);
+void set_info_list(Node *inicio, int pos, int c_point, double dist);

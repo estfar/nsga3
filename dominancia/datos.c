@@ -212,7 +212,7 @@ void imprimir_lista(Node *inicio){
 	Node *actual = inicio;
 	int i=0;
 	while(actual != NULL){
-		printf("%d\t%d\n", i, actual->data);
+		printf("%d\t%d\t%d\t%lf\n", i, actual->data, actual->c_point, actual->dist);
 		actual = actual->next;
 		i++;
 	}
@@ -227,4 +227,15 @@ void liberar_lista(Node **inicio){
 		free(temp2);
 	}
 	*inicio = NULL;
+}
+
+/* Colocar la información c_point y dist en los campos correspondientes en el nodo de la lista que se encuentra en la posición pos */
+void set_info_list(Node *inicio, int pos, int c_point, double dist){
+	Node *current = inicio;
+	for(int i=0; i<pos; i++){
+		current = current->next;
+	}
+
+	current->dist = dist;
+	current->c_point = c_point;
 }
