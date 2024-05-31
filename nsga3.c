@@ -1,7 +1,7 @@
 #include"dominancia/tarea01.h"
 
 /* normaliza la población general y los puntos de referencia */
-double **normalize(double **pop, int * elite_arr, int curr_size, int m, double **ref_points, 
+double **normalize(double **pop, int *elite_arr, int curr_size, int m, double **ref_points, 
 		   int H){
 	int i,j;
         double	min, scl;
@@ -10,7 +10,7 @@ double **normalize(double **pop, int * elite_arr, int curr_size, int m, double *
 	double *a = (double *)calloc(m, sizeof(double));
 	/*identify the ideal point for each objective function*/
 	for(i=0; i<m; i++){
-		min = pop[elite_arr[0]][i]
+		min = pop[indice(elite, 0)][i]
 		for(j=0; j<curr_size; j++){
 			if(min > pop[elite_arr[j]][i]) min = pop[elite_arr[j]][i];
 		}
@@ -81,7 +81,7 @@ void associate(double **normalized, Node* elite, int curr_size, int m, double **
 				index = j;
 			}
 		}
-		set_info_list(elite, i+1, index, menor);
+		set_info_list(elite, i, index, menor);
 		//closest_refpoint[i] = index;
 		//distances[i] = menor;
 	}	 
@@ -145,12 +145,14 @@ void niching(int *niche_count, Node *elite, int H, int size_nondom,
 		}
 		// buscar las posiciones de elite que corresponda(n) a jbar
 		liberar_lista(&ijbar->next);
-		Node *temp = elite->next;
-		int il =0;
+		Node *temp = elite;
+		int il = 0;
 		while(il<current_size-non_dom){
 			temp = temp->next;
+			il++;
 		}
-		for(i=current_size-non_dom+1;i<current_size+1; i++){
+		for(i=current_size-non_dom;i<current_size; i++){
+			if(temp==NULL) break;
 			if(temp->c_point == jbar) agregar(ijbar, i);
 			temp= temp->next;
 		}
@@ -170,15 +172,15 @@ void niching(int *niche_count, Node *elite, int H, int size_nondom,
 						idx = ijbar_ind;
 					}
 				}
-				int index_real = indices(elite, idx+1);
-				copiar_ind(next_pop, m, n-K-1, pop[index_real]);
+				int index_real = indices(elite, idx);
+				copiar_ind(next_pop, m, n-K+k-1, pop[index_real]);
 			}else{
 				// agregar aleatorio a next_pop
-				int add_ind = indice(ijbar, rnd(1, size_ijbar+1));
-				int index_elite = indice(elite, add_ind+1);
+				int add_ind = indice(ijbar, rnd(1, size_ijbar));
+				int index_elite = indice(elite, add_ind);
 				//         next_pop, n_obj, pos, individuo
-				copiar_ind(next_pop, m, n-K+k, pop[index_elite] );
-				eliminar(elite, add_ind+1)
+				copiar_ind(next_pop, m, n-K+k-1, pop[index_elite] );
+				eliminar(elite, add_ind)
 			}
 			k++;
 			pi++;
@@ -194,11 +196,10 @@ void niching(int *niche_count, Node *elite, int H, int size_nondom,
 
 void non_dominanted_sort(double **pop, double **nextpop, int n, int m, int H){
 	
-	int *dominadas = (int *)calloc(2*n, int); 
-	int *nodominadas = (int *)calloc(2*n, int);
+	int *dominadas; //= (int *)calloc(2*n, int); 
+	int *nodominadas; //= (int *)calloc(2*n, int);
 	int size_dom, size_nondom, current_size=0;
 	Node *elite;
-	//int *elite_arr;
 	int i, j;
 	
 	crear_lista(elite);
@@ -235,10 +236,11 @@ void non_dominanted_sort(double **pop, double **nextpop, int n, int m, int H){
 		size_dom = n-size_nondom;
 	}
 	
-	//pop(&elite);
-	//elite_arr = lista_a_arreglo(elite); 
+	pop(&elite);
+	int *elite_arr = (int *)calloc(current_size, sizeof(int));
+	lista_a_arreglo(lista, &elite_arr);
 	///*contiene los indices de los frentes no dominados, siendo los últimos 
-	//los que pertenecen al frente F_l*/
+	//los que pertenecen al frente F_l
 	//liberar_lista(elite);
 
 	if (current_size == n){
@@ -252,7 +254,7 @@ void non_dominanted_sort(double **pop, double **nextpop, int n, int m, int H){
 		copiar(pop, next_pop, current_size-size_nondom, 
 				m, elite);
 		/* normalizar los puntos de S_t(elite)*/
-		double **normalized = normalize(pop, elite, 
+		double **normalized = normalize(pop, elite_arr, 
 				current_size, m, ref_points, H);
 		/* asociar los punto de S_t(elite) con los
 		 * puntos de referencia */
@@ -274,10 +276,12 @@ void non_dominanted_sort(double **pop, double **nextpop, int n, int m, int H){
 
 	}
 
+	liberar_lista(&elite);
 	free(dominadas);
 	free(nodominadas);
 	for(i=0; i<current_size; i++){
 		free(normalized[i]);
 	}
 	free(normalized);
+	free(elite_arr);
 }

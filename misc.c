@@ -22,7 +22,7 @@ void copiar(double **pop, double **next_pop, int n, int m,
 	    Node *indices){
 	for(int i=0; i<n; i++){
 		for(int j=0; j<m; j++){
-			next_pop[i][j] = pop[indice(indices, i+1)][j];
+			next_pop[i][j] = pop[indice(indices, i)][j];
 		}
 	}
 }

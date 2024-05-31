@@ -20,7 +20,7 @@ int indice(Node *inicio, int index);
 int size(Node *inicio);
 int vaciar_lista(Node *inicio);
 int buscar(Node *inicio, int item);
-int *lista_a_arreglo(Node *inicio);
+void lista_a_arreglo(Node *inicio, int **arr);
 void imprimir_lista(Node *inicio);
 void liberar_lista(Node **inicio);
 void set_info_list(Node *inicio, int pos, int c_point, double dist);

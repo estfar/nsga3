@@ -148,7 +148,8 @@ int algoritmo1(char *fname, int n, int m){
 	printf("El algoritmo 1 se ejecuto en: %lf\n", timeTaken);
 	pop(&lista);
 	int tam = size(lista);
-	int *indices = lista_a_arreglo(lista);
+	int *indices = (int *)calloc(tam, sizeof(int));
+	lista_a_arreglo(lista, &indices);
 	
 	liberar_lista(&lista);
 
@@ -242,7 +243,8 @@ int algoritmo2(char *fname, int n, int m){
 	//imprimir_lista(lista);	
 	pop(&lista);
 	tam = size(lista);
-	int *indices = lista_a_arreglo(lista);
+	int *indices = (int *)calloc(tam, sizeof(int));
+	lista_a_arreglo(lista, &indices);
 	
 	liberar_lista(&lista);
 
@@ -399,10 +401,12 @@ int algoritmo3(double **datos, int n, int m, int **nodominadas, int **dominadas)
 		pop(&B);
 		sizeTotal = size(B);
 		
-		int *indexes = lista_a_arreglo(B);
+		int *indexes = (int *)calloc(sizeTotal, sizeof(int));
+		lista_a_arreglo(B, &indexes);
 		
 		maxima = algoritmoM3(datos, indexes, sizeTotal, m);
 		
+		free(indexes);
 		liberar_lista(&B);
 	}
 	end = clock();
@@ -413,10 +417,10 @@ int algoritmo3(double **datos, int n, int m, int **nodominadas, int **dominadas)
 	pop(&maxima);
 	int tam = size(maxima);
 	int dominadas_tam = n - tam;
-	*nodominadas = lista_a_arreglo(maxima);
+	
+	lista_a_arreglo(maxima, nodominadas);
 	int i, j;
-
-	*dominadas = (int *)malloc(dominadas_tam * sizeof(int));
+	printf("lista a arreglo\n");
 	Node * temp1 = maxima;
 
 	j=0;

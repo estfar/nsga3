@@ -195,17 +195,17 @@ int size(Node *inicio){
 	return tam;
 }
 /* Convertir a arreglo */
-int *lista_a_arreglo(Node *inicio){
+void lista_a_arreglo(Node *inicio, int **arr){
 	int tam = size(inicio);
-	int *arreglo = (int *)malloc(sizeof(int)*tam);
+	//int *arreglo = (int *)malloc(sizeof(int)*tam);
 	Node *actual = inicio;
 	int i=0;
 	while(actual != NULL){
-		arreglo[i] = actual->data;
+		(*arr)[i] = actual->data;
 		i++;	
 		actual = actual->next;
 	}
-	return arreglo;
+//	return arreglo;
 }
 /* Imprimir el contenido de lista */
 void imprimir_lista(Node *inicio){
