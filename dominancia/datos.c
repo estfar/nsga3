@@ -221,6 +221,9 @@ void imprimir_lista(Node *inicio){
 void liberar_lista(Node **inicio){
 	Node * temp = *inicio;
 	Node *temp2;
+	if(temp == NULL){
+		return;
+	}
 	while(temp != NULL){
 		temp2 = temp;
 		temp = temp->next;
