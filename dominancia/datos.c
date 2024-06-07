@@ -108,7 +108,7 @@ int eliminar(Node **inicio, int data){
 	}
 	
 	if (actual->next == NULL){
-		printf("EL ELEMENTO NO SE ENCUENTRA EN LA LISTA\n");
+		printf("EL ELEMENTO NO SE ENCUENTRA EN LA LISTA PARA ELIMINAR\n");
 		return dato;
 	}
 

@@ -418,16 +418,24 @@ int algoritmo3(double **datos, int n, int m, int **nodominadas, int **dominadas)
 	int tam = size(maxima);
 	int dominadas_tam = n - tam;
 	
-	lista_a_arreglo(maxima, nodominadas);
+	//lista_a_arreglo(maxima, nodominadas);
+	Node *temp2 = maxima;
 	int i, j;
+	i=0;
+	while(temp2 != NULL){
+		(*nodominadas)[i] = (int)datos[temp2->data][m];
+		//printf("%d ", (*nodominadas)[i]);
+		i++;
+		temp2 = temp2->next;
+	}
 	printf("lista a arreglo\n");
 	Node * temp1 = maxima;
 
 	j=0;
 	int k=0, kk=0;
 	for(i=0; i<n; i++){
-		if(buscar(maxima, i)==0){
-			(*dominadas)[j] = i;
+		if(buscar(maxima, (int)datos[i][m])==0){
+			(*dominadas)[j] = (int)datos[i][m];
 			j++;
 		}
 		if(j>=dominadas_tam) break;

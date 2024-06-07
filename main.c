@@ -5,8 +5,13 @@
 int main(){
 	
 	double **datos;
-	datos = archivo_a_arreglo("dominancia/sol5D.txt", 10, 3);
-
+	//datos = archivo_a_arreglo("dominancia/sol5D.txt", 10, 3);
+	datos = archivo_a_arreglo("ref_dirs.txt", 10, 3);
+	for(int i=0; i<10; i++){ 
+		for(int j=0; j<3; j++) printf("%f\t", datos[i][j]);
+		printf("\n");
+	}
+	
 	double **next_datos = (double**)calloc(10, sizeof(double *));
 	for(int i=0; i<10; i++){
 		next_datos[i] = (double *)calloc(3, sizeof(double));
